@@ -41,6 +41,7 @@ In general follow the example here https://scalr-athena.readthedocs-hosted.com/e
 1. Create Policies (scalr-module.hcl shows the policy bindings that are required)
    1. cloud.locations - Policy to limit the cloud locations (note this can be all locations but the policy must exist)
 1. Create a Global Variable `name_fmt` with REGEX `^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`
+1. Create a Global Variable `sesnitive_input` and set both flags on to mask inputs.
 1. Fork or clone the Source repo (https://github.com/scalr-eap/eks_wordpress)
 1. Create the Service Catalog offering pointing to your copy repo
 1. Request the offering. It can take 5-10 minutes for the DNS name to work and the POD to become active.
