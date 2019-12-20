@@ -1,6 +1,10 @@
 
-variable mysql_password {}
-variable root_password {}
+variable mysql_password {
+  sensitive = true
+}
+variable root_password {
+    sensitive = true
+}
 
 variable "cluster_name" {
   type    = string
