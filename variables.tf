@@ -1,9 +1,9 @@
 
 variable mysql_password {
-  sensitive = true
+#  sensitive = true
 }
 variable root_password {
-    sensitive = true
+#    sensitive = true
 }
 
 variable "cluster_name" {
