@@ -16,17 +16,12 @@ provider "google-beta" {
   region      = var.region
 }
 
-/*
-provider "google" {
-    project     = "${var.scalr_google_project}"
-    credentials = "${file("customer-success-680d70d7f0e2.json")}"
-    region      = var.region
+data "google_compute_zones" "available" {
 }
-*/
 
 data "google_container_cluster" "this" {
   name = "${var.cluster_name}"
-  location = var.region
+  location = data.google_compute_zones.available.names[0]
 }
 
 data "google_client_config" "current" {}
@@ -55,6 +50,35 @@ resource "kubernetes_secret" "root" {
 
   data = {
     password = var.root_password
+  }
+}
+
+resource "kubernetes_network_policy" "this" {
+  metadata {
+    name      = "terraform-network-policy"
+    namespace = "default"
+  }
+
+  spec {
+    pod_selector {
+          }
+
+    ingress {
+      ports {
+        port     = "http"
+        protocol = "TCP"
+      }
+
+      from {
+        ip_block {
+          cidr = "0.0.0.0/0"
+        }
+      }
+    }
+
+    egress {} # single empty rule to allow all egress traffic
+
+    policy_types = ["Ingress", "Egress"]
   }
 }
 

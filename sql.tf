@@ -1,7 +1,8 @@
 resource "google_compute_global_address" "private_ip_address" {
-  provider = google-beta
+#  provider = google-beta
 
   name          = "private-ip-address"
+  address       = "172.18.0.0"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
   prefix_length = 16
@@ -9,7 +10,7 @@ resource "google_compute_global_address" "private_ip_address" {
 }
 
 resource "google_service_networking_connection" "private_vpc_connection" {
-  provider = google-beta
+#  provider = google-beta
 
   network                 = data.google_container_cluster.this.network
   service                 = "servicenetworking.googleapis.com"
@@ -17,7 +18,7 @@ resource "google_service_networking_connection" "private_vpc_connection" {
 }
 
 resource "google_sql_database_instance" "drupal_dbi" {
-  provider = "google-beta"
+#  provider = "google-beta"
   database_version = "MYSQL_5_7"
 
   depends_on = [google_service_networking_connection.private_vpc_connection]
@@ -28,6 +29,9 @@ resource "google_sql_database_instance" "drupal_dbi" {
     tier = "db-f1-micro"
     ip_configuration {
       private_network = data.google_container_cluster.this.network
+    }
+    location_preference {
+      zone = data.google_compute_zones.available.names[0]
     }
 
   }
